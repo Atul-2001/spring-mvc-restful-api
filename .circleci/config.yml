@@ -22,10 +22,17 @@ jobs:
       - run:
           name: Build
           command: mvn -B -DskipTests clean package
-      # Then run your tests!
+      # Then run your tests! and gen code coverage
       - run:
           name: Test
-          command: mvn test
+          command: mvn jacoco:prepare-agent test
+
+      - store_test_results:
+          path: target/surefire-reports
+
+      - run:
+          name: Send to CodeCov
+          command: bash <(curl -s https://codecov.io/bash)
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
