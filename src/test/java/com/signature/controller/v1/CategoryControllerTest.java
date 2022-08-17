@@ -1,12 +1,14 @@
 package com.signature.controller.v1;
 
-import com.signature.domain.CategoryDTO;
+import com.signature.mapper.CategoryMapper;
+import com.signature.model.Category;
 import com.signature.service.CategoryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -22,6 +24,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@ExtendWith(MockitoExtension.class)
 class CategoryControllerTest {
 
   private MockMvc mockMvc;
@@ -29,21 +32,19 @@ class CategoryControllerTest {
   @Mock
   public CategoryService categoryService;
 
-  @InjectMocks
   public CategoryController categoryController;
 
   @BeforeEach
-  void setUp() throws Exception {
-    try (AutoCloseable openMocks = MockitoAnnotations.openMocks(this)) {
-      mockMvc = MockMvcBuilders.standaloneSetup(categoryController).build();
-    }
+  void setUp() {
+    categoryController = new CategoryController(CategoryMapper.INSTANCE, categoryService);
+    mockMvc = MockMvcBuilders.standaloneSetup(categoryController).build();
   }
 
   @Test
   void getAllCategories() throws Exception {
-    CategoryDTO category2 = new CategoryDTO(1L, "Dried");
-    CategoryDTO category1 = new CategoryDTO(2L, "Fruits");
-    List<CategoryDTO> categories = Arrays.asList(category1, category2);
+    Category category2 = new Category(1L, "Dried");
+    Category category1 = new Category(2L, "Fruits");
+    List<Category> categories = Arrays.asList(category1, category2);
 
     when(categoryService.getAll()).thenReturn(categories);
 
@@ -55,7 +56,7 @@ class CategoryControllerTest {
 
   @Test
   void getCategoryByName() throws Exception {
-    CategoryDTO category1 = new CategoryDTO(1L, "Fruits");
+    Category category1 = new Category(1L, "Fruits");
 
     when(categoryService.getByName(anyString())).thenReturn(category1);
 

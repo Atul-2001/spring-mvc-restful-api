@@ -5,8 +5,9 @@ import com.signature.repository.CustomerRepository;
 import com.signature.service.impl.CustomerServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,6 +21,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class CustomerServiceTest {
 
   private CustomerService customerService;
@@ -28,10 +30,8 @@ class CustomerServiceTest {
   public CustomerRepository customerRepository;
 
   @BeforeEach
-  void setUp() throws Exception {
-    try (AutoCloseable openMocks = MockitoAnnotations.openMocks(this)) {
-      customerService = new CustomerServiceImpl(customerRepository);
-    }
+  void setUp() {
+    customerService = new CustomerServiceImpl(customerRepository);
   }
 
   @Test

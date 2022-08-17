@@ -1,14 +1,14 @@
 package com.signature.service;
 
-import com.signature.domain.CategoryDTO;
+import com.signature.model.Category;
 
 import java.util.List;
 
 public interface CategoryService {
 
-    CategoryDTO getByName(String name);
+  Category getByName(String name);
 
-    CategoryDTO getById(Long id);
+  Category getById(Long id);
 
-    List<CategoryDTO> getAll();
+  List<Category> getAll();
 }

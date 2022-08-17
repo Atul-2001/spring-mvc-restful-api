@@ -4,7 +4,7 @@ import com.signature.domain.CategoryDTO;
 import com.signature.model.Category;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CategoryMapperTest {
 
@@ -13,30 +13,24 @@ class CategoryMapperTest {
   @Test
   void categoryToCategoryDTO() {
     //given
-    Category category = new Category();
-    category.setName("Fruits");
-    category.setId(1L);
+    Category category = new Category(1L, "Fruits");
 
     //when
     CategoryDTO categoryDTO = categoryMapper.categoryToCategoryDTO(category);
 
     //then
-    assertEquals(1L, categoryDTO.getId());
     assertEquals("Fruits", categoryDTO.getName());
   }
 
   @Test
   void categoryDtoToCategory() {
     //given
-    CategoryDTO categoryDTO = new CategoryDTO();
-    categoryDTO.setName("Fruits");
-    categoryDTO.setId(1L);
+    CategoryDTO categoryDTO = new CategoryDTO("Fruits");
 
     //when
     Category category = categoryMapper.categoryDtoToCategory(categoryDTO);
 
     //then
-    assertEquals(1L, category.getId());
     assertEquals("Fruits", category.getName());
   }
 }

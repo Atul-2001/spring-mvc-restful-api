@@ -6,9 +6,10 @@ import com.signature.model.Customer;
 import com.signature.service.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -25,6 +26,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@ExtendWith(MockitoExtension.class)
 class CustomerControllerTest {
 
   private MockMvc mockMvc;
@@ -34,16 +36,13 @@ class CustomerControllerTest {
   @Mock
   public CustomerService customerService;
 
-  @InjectMocks
   public CustomerController customerController;
 
   @BeforeEach
-  void setUp() throws Exception {
-    try (AutoCloseable openMocks = MockitoAnnotations.openMocks(this)) {
-      customerController = new CustomerController(CustomerMapper.INSTANCE, customerService);
-      mockMvc = MockMvcBuilders.standaloneSetup(customerController).build();
-      objectMapper = new ObjectMapper();
-    }
+  void setUp() {
+    customerController = new CustomerController(CustomerMapper.INSTANCE, customerService);
+    mockMvc = MockMvcBuilders.standaloneSetup(customerController).build();
+    objectMapper = new ObjectMapper();
   }
 
   @Test
