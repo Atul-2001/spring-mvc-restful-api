@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
@@ -33,7 +32,7 @@ class CategoryServiceTest {
   }
 
   @Test
-  void getByName() {
+  void getByName() throws Exception {
     //given
     Category category = new Category(1L, "Fruits");
 
@@ -48,7 +47,7 @@ class CategoryServiceTest {
   }
 
   @Test
-  void getById() {
+  void getById() throws Exception {
     //given
     Category category = new Category(1L, "Fruits");
 

@@ -9,7 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -101,18 +100,14 @@ class CustomerControllerTest {
   @Test
   void updateCustomer() throws Exception {
     //given
-    Customer oldCustomer = new Customer(1L, "Rishu", "Singh");
-
     Customer customer = new Customer(1L, "Atul", "Singh");
 
     //when
-    when(customerService.getCustomer(anyLong())).thenReturn(oldCustomer);
     when(customerService.updateCustomer(any(Customer.class))).thenReturn(customer);
 
     //then
-    final CustomerDTO customerDTO = new CustomerDTO("Atul", "Singh");
     mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/customers/1")
-                    .content(objectMapper.writeValueAsString(customerDTO))
+                    .content(objectMapper.writeValueAsString(new CustomerDTO("Atul", "Singh")))
                     .accept(MediaType.APPLICATION_JSON)
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
@@ -123,12 +118,9 @@ class CustomerControllerTest {
   @Test
   void patchCustomer() throws Exception {
     //given
-    Customer oldCustomer = new Customer(1L, "Rishu", "Singh");
-
     Customer customer = new Customer(1L, "Atul", "Singh");
 
     //when
-    when(customerService.getCustomer(anyLong())).thenReturn(oldCustomer);
     when(customerService.patchCustomer(any(Customer.class))).thenReturn(customer);
 
     //then
@@ -145,10 +137,6 @@ class CustomerControllerTest {
 
   @Test
   void deleteCustomer() throws Exception {
-    //when
-    when(customerService.getCustomer(1L)).thenReturn(new Customer(1L, "Rishu", "Singh"));
-
-    //then
     mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/customers/1")).andExpect(status().isOk());
   }
 }

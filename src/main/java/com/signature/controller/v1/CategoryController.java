@@ -40,16 +40,16 @@ public class CategoryController {
             .map(this::categoryToCategoryDto).collect(Collectors.toList()));
   }
 
-  private ResponseEntity<?> getCategoryById(final Long id) {
+  private ResponseEntity<?> getCategoryById(final Long id) throws Exception {
     return ResponseEntity.ok(categoryMapper.categoryToCategoryDTO(categoryService.getById(id)));
   }
 
-  public ResponseEntity<?> getCategoryByName(String name) {
+  public ResponseEntity<?> getCategoryByName(String name) throws Exception {
     return ResponseEntity.ok(categoryMapper.categoryToCategoryDTO(categoryService.getByName(name)));
   }
 
   @GetMapping("/{identifier}")
-  public ResponseEntity<?> getCategoryByIdentifier(@PathVariable String identifier) {
+  public ResponseEntity<?> getCategoryByIdentifier(@PathVariable String identifier) throws Exception {
     if (NumberUtils.isParsable(identifier))
       return getCategoryById(Long.parseLong(identifier));
     else

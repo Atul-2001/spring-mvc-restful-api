@@ -67,7 +67,7 @@ class CustomerServiceITest {
   @Test
   @Order(2)
   @DirtiesContext
-  void updateCustomer() {
+  void updateCustomer() throws Exception {
     Customer customer = new Customer(2L, "Pranjal", "Singh");
 
     Customer updated = customerService.updateCustomer(customer);
@@ -136,7 +136,7 @@ class CustomerServiceITest {
   @Test
   @Order(5)
   @DirtiesContext
-  void getCustomer() {
+  void getCustomer() throws Exception {
     Customer customer = customerService.getCustomer(1L);
 
     assertNotNull(customer, "Null customer returned!");

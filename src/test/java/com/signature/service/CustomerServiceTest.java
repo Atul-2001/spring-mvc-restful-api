@@ -55,7 +55,7 @@ class CustomerServiceTest {
   }
 
   @Test
-  void updateCustomer() {
+  void updateCustomer() throws Exception {
     //given
     Customer customer = new Customer(1L, "Atul", "Singh");
 
@@ -80,7 +80,7 @@ class CustomerServiceTest {
   }
 
   @Test
-  void getCustomer() {
+  void getCustomer() throws Exception {
     //given
     Customer customer = new Customer(1L, "Atul", "Singh");
 

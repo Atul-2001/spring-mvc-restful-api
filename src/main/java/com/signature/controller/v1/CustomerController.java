@@ -45,7 +45,7 @@ public class CustomerController {
   }
 
   @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> getCustomer(@PathVariable final Long id) {
+  public ResponseEntity<?> getCustomer(@PathVariable final Long id) throws Exception {
     final Customer customer = customerService.getCustomer(id);
     return ResponseEntity.ok(customerMapper.customerToCustomerDto(customer));
   }
@@ -64,40 +64,25 @@ public class CustomerController {
 
   @PutMapping("/{id}")
   public ResponseEntity<?> updateCustomer(@PathVariable final Long id,
-                                          @RequestBody final CustomerDTO customerDTO) {
-    Customer customer = customerService.getCustomer(id);
-    if (customer == null) {
-      return ResponseEntity.notFound().build();
-    } else {
-      customer = customerMapper.customerDtoToCustomer(customerDTO);
-      customer.setId(id);
-      final Customer updatedCustomer = customerService.updateCustomer(customer);
-      return ResponseEntity.ok(customerMapper.customerToCustomerDto(updatedCustomer));
-    }
+                                          @RequestBody final CustomerDTO customerDTO) throws Exception {
+    Customer customer = customerMapper.customerDtoToCustomer(customerDTO);
+    customer.setId(id);
+    final Customer updatedCustomer = customerService.updateCustomer(customer);
+    return ResponseEntity.ok(customerMapper.customerToCustomerDto(updatedCustomer));
   }
 
   @PatchMapping("/{id}")
   public ResponseEntity<?> patchCustomer(@PathVariable final Long id,
-                                         @RequestBody final CustomerDTO customerDTO) {
-    Customer customer = customerService.getCustomer(id);
-    if (customer == null) {
-      return ResponseEntity.notFound().build();
-    } else {
-      customer = customerMapper.customerDtoToCustomer(customerDTO);
-      customer.setId(id);
-      final Customer updatedCustomer = customerService.patchCustomer(customer);
-      return ResponseEntity.ok(customerMapper.customerToCustomerDto(updatedCustomer));
-    }
+                                         @RequestBody final CustomerDTO customerDTO) throws Exception {
+    Customer customer = customerMapper.customerDtoToCustomer(customerDTO);
+    customer.setId(id);
+    final Customer patchedCustomer = customerService.patchCustomer(customer);
+    return ResponseEntity.ok(customerMapper.customerToCustomerDto(patchedCustomer));
   }
 
   @DeleteMapping("/{id}")
   public ResponseEntity<?> deleteCustomer(@PathVariable final Long id) {
-    final Customer customer = customerService.getCustomer(id);
-    if (customer == null) {
-      return ResponseEntity.notFound().build();
-    } else {
-      customerService.deleteCustomer(id);
-      return ResponseEntity.ok().build();
-    }
+    customerService.deleteCustomer(id);
+    return ResponseEntity.ok().build();
   }
 }
