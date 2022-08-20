@@ -34,6 +34,28 @@ public class CustomerServiceImpl implements CustomerService {
   }
 
   @Override
+  public Customer patchCustomer(Customer customer) {
+    Customer existingCustomer = getCustomer(customer.getId());
+    if (existingCustomer == null) {
+      log.error("Customer with id {} not found", customer.getId());
+      return null;
+    } else {
+      if (customer.getFirstName() != null) {
+        existingCustomer.setFirstName(customer.getFirstName());
+      }
+      if (customer.getLastName() != null) {
+        existingCustomer.setLastName(customer.getLastName());
+      }
+      Integer rowAffected = customerRepository.update(existingCustomer);
+      if (rowAffected == 0) {
+        log.error("Failed to patch customer with id {}", customer.getId());
+        return null;
+      }
+      return getCustomer(customer.getId());
+    }
+  }
+
+  @Override
   public Customer getCustomer(long customerId) {
     return customerRepository.findById(customerId).orElse(null);
   }

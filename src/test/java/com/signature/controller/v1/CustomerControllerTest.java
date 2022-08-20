@@ -1,6 +1,7 @@
 package com.signature.controller.v1;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.signature.domain.CustomerDTO;
 import com.signature.mapper.CustomerMapper;
 import com.signature.model.Customer;
 import com.signature.service.CustomerService;
@@ -58,7 +59,7 @@ class CustomerControllerTest {
                     .content(objectMapper.writeValueAsString(new Customer("Atul", "Singh")))
                     .accept(MediaType.APPLICATION_JSON)
                     .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
+            .andExpect(status().isCreated())
             .andExpect(jsonPath("$.firstName", equalTo("Atul")))
             .andExpect(jsonPath("$.lastName", equalTo("Singh")));
   }
@@ -102,8 +103,6 @@ class CustomerControllerTest {
     //given
     Customer oldCustomer = new Customer(1L, "Rishu", "Singh");
 
-    customerService.addCustomer(oldCustomer);
-
     Customer customer = new Customer(1L, "Atul", "Singh");
 
     //when
@@ -111,8 +110,32 @@ class CustomerControllerTest {
     when(customerService.updateCustomer(any(Customer.class))).thenReturn(customer);
 
     //then
+    final CustomerDTO customerDTO = new CustomerDTO("Atul", "Singh");
     mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/customers/1")
-                    .content(objectMapper.writeValueAsString(new Customer("Atul", "Singh")))
+                    .content(objectMapper.writeValueAsString(customerDTO))
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.firstName", equalTo("Atul")))
+            .andExpect(jsonPath("$.lastName", equalTo("Singh")));
+  }
+
+  @Test
+  void patchCustomer() throws Exception {
+    //given
+    Customer oldCustomer = new Customer(1L, "Rishu", "Singh");
+
+    Customer customer = new Customer(1L, "Atul", "Singh");
+
+    //when
+    when(customerService.getCustomer(anyLong())).thenReturn(oldCustomer);
+    when(customerService.patchCustomer(any(Customer.class))).thenReturn(customer);
+
+    //then
+    final CustomerDTO customerDTO = new CustomerDTO();
+    customerDTO.setFirstName("Atul");
+    mockMvc.perform(MockMvcRequestBuilders.patch("/api/v1/customers/1")
+                    .content(objectMapper.writeValueAsString(customerDTO))
                     .accept(MediaType.APPLICATION_JSON)
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())

@@ -10,6 +10,8 @@ public interface CustomerService {
 
   Customer updateCustomer(Customer customer);
 
+  Customer patchCustomer(Customer customer);
+
   Customer getCustomer(long customerId);
 
   List<Customer> getAllCustomers();

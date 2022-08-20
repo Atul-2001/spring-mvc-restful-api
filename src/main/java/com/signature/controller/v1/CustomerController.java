@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
-import java.net.URL;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -72,6 +72,20 @@ public class CustomerController {
       customer = customerMapper.customerDtoToCustomer(customerDTO);
       customer.setId(id);
       final Customer updatedCustomer = customerService.updateCustomer(customer);
+      return ResponseEntity.ok(customerMapper.customerToCustomerDto(updatedCustomer));
+    }
+  }
+
+  @PatchMapping("/{id}")
+  public ResponseEntity<?> patchCustomer(@PathVariable final Long id,
+                                         @RequestBody final CustomerDTO customerDTO) {
+    Customer customer = customerService.getCustomer(id);
+    if (customer == null) {
+      return ResponseEntity.notFound().build();
+    } else {
+      customer = customerMapper.customerDtoToCustomer(customerDTO);
+      customer.setId(id);
+      final Customer updatedCustomer = customerService.patchCustomer(customer);
       return ResponseEntity.ok(customerMapper.customerToCustomerDto(updatedCustomer));
     }
   }
