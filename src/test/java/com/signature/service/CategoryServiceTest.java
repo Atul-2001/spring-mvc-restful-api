@@ -4,7 +4,10 @@ import com.signature.model.Category;
 import com.signature.repository.CategoryRepository;
 import com.signature.service.impl.CategoryServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -19,6 +22,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@TestMethodOrder(OrderAnnotation.class)
 class CategoryServiceTest {
 
   private CategoryService categoryService;
@@ -32,6 +36,7 @@ class CategoryServiceTest {
   }
 
   @Test
+  @Order(1)
   void getByName() throws Exception {
     //given
     Category category = new Category(1L, "Fruits");
@@ -47,6 +52,7 @@ class CategoryServiceTest {
   }
 
   @Test
+  @Order(2)
   void getById() throws Exception {
     //given
     Category category = new Category(1L, "Fruits");
@@ -62,6 +68,7 @@ class CategoryServiceTest {
   }
 
   @Test
+  @Order(3)
   void getAll() {
     //given
     List<Category> categories = Arrays.asList(new Category(), new Category(), new Category());

@@ -50,15 +50,13 @@ public class VendorController {
   @GetMapping(value = "/{id}")
   @ResponseStatus(HttpStatus.OK)
   public VendorDTO getVendor(@PathVariable final Long id) throws Exception {
-    return vendorToVendorDto(vendorService.getVendor(id));
+    return vendorMapper.vendorToVendorDto(vendorService.getVendor(id));
   }
 
   @GetMapping
   @ResponseStatus(HttpStatus.OK)
   public List<VendorDTO> getAllVendors() {
-    return vendorService.getAllVendors().stream()
-            .map(this::vendorToVendorDto)
-            .collect(Collectors.toList());
+    return vendorService.getAllVendors().stream().map(this::vendorToVendorDto).collect(Collectors.toList());
   }
 
   @PutMapping(value = "/{id}")
@@ -67,7 +65,7 @@ public class VendorController {
                                 @RequestBody final VendorDTO vendorDTO) throws Exception {
     final Vendor vendor = vendorMapper.vendorDtoToVendor(vendorDTO);
     vendor.setId(id);
-    return vendorToVendorDto(vendorService.updateVendor(vendor));
+    return vendorMapper.vendorToVendorDto(vendorService.updateVendor(vendor));
   }
 
   @PatchMapping(value = "/{id}")
@@ -76,7 +74,7 @@ public class VendorController {
                                @RequestBody final VendorDTO vendorDTO) throws Exception {
     final Vendor vendor = vendorMapper.vendorDtoToVendor(vendorDTO);
     vendor.setId(id);
-    return vendorToVendorDto(vendorService.patchVendor(vendor));
+    return vendorMapper.vendorToVendorDto(vendorService.patchVendor(vendor));
   }
 
   @DeleteMapping(value = "/{id}")

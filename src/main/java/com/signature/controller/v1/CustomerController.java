@@ -6,8 +6,6 @@ import com.signature.model.Customer;
 import com.signature.service.CustomerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -16,9 +14,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -35,54 +34,53 @@ public class CustomerController {
     this.customerService = customerService;
   }
 
-  @PostMapping
-  public ResponseEntity<?> createCustomer(@RequestBody final CustomerDTO customerDTO) {
-    final Customer customer = customerMapper.customerDtoToCustomer(customerDTO);
-    final Customer newCustomer = customerService.addCustomer(customer);
-    final CustomerDTO newCustomerDTO = customerMapper.customerToCustomerDto(newCustomer);
-    final URI location = URI.create("/api/v1/customers/" + customer.getId());
-    return ResponseEntity.status(HttpStatus.CREATED).location(location).body(newCustomerDTO);
-  }
-
-  @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> getCustomer(@PathVariable final Long id) throws Exception {
-    final Customer customer = customerService.getCustomer(id);
-    return ResponseEntity.ok(customerMapper.customerToCustomerDto(customer));
-  }
-
   private CustomerDTO customerToCustomerDto(final Customer customer) {
     CustomerDTO customerDTO = customerMapper.customerToCustomerDto(customer);
     customerDTO.setCustomerUrl("/api/v1/customers/" + customer.getId());
     return customerDTO;
   }
 
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
+  public CustomerDTO createCustomer(@RequestBody final CustomerDTO customerDTO) {
+    final Customer customer = customerMapper.customerDtoToCustomer(customerDTO);
+    return customerToCustomerDto(customerService.addCustomer(customer));
+  }
+
+  @GetMapping(value = "/{id}")
+  @ResponseStatus(HttpStatus.OK)
+  public CustomerDTO getCustomer(@PathVariable final Long id) throws Exception {
+    return customerMapper.customerToCustomerDto(customerService.getCustomer(id));
+  }
+
   @GetMapping
-  public ResponseEntity<?> getAllCustomers() {
-    return ResponseEntity.ok(customerService.getAllCustomers().stream()
-            .map(this::customerToCustomerDto).collect(Collectors.toList()));
+  @ResponseStatus(HttpStatus.OK)
+  public List<CustomerDTO> getAllCustomers() {
+    return customerService.getAllCustomers().stream()
+            .map(this::customerToCustomerDto).collect(Collectors.toList());
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<?> updateCustomer(@PathVariable final Long id,
-                                          @RequestBody final CustomerDTO customerDTO) throws Exception {
+  @ResponseStatus(HttpStatus.OK)
+  public CustomerDTO updateCustomer(@PathVariable final Long id,
+                                    @RequestBody final CustomerDTO customerDTO) throws Exception {
     Customer customer = customerMapper.customerDtoToCustomer(customerDTO);
     customer.setId(id);
-    final Customer updatedCustomer = customerService.updateCustomer(customer);
-    return ResponseEntity.ok(customerMapper.customerToCustomerDto(updatedCustomer));
+    return customerMapper.customerToCustomerDto(customerService.updateCustomer(customer));
   }
 
   @PatchMapping("/{id}")
-  public ResponseEntity<?> patchCustomer(@PathVariable final Long id,
-                                         @RequestBody final CustomerDTO customerDTO) throws Exception {
+  @ResponseStatus(HttpStatus.OK)
+  public CustomerDTO patchCustomer(@PathVariable final Long id,
+                                   @RequestBody final CustomerDTO customerDTO) throws Exception {
     Customer customer = customerMapper.customerDtoToCustomer(customerDTO);
     customer.setId(id);
-    final Customer patchedCustomer = customerService.patchCustomer(customer);
-    return ResponseEntity.ok(customerMapper.customerToCustomerDto(patchedCustomer));
+    return customerMapper.customerToCustomerDto(customerService.patchCustomer(customer));
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<?> deleteCustomer(@PathVariable final Long id) {
+  @ResponseStatus(HttpStatus.OK)
+  public void deleteCustomer(@PathVariable final Long id) {
     customerService.deleteCustomer(id);
-    return ResponseEntity.ok().build();
   }
 }

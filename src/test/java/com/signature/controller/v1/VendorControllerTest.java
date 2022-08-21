@@ -81,8 +81,7 @@ class VendorControllerTest {
     mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/vendors/1")
                     .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.name", equalTo("Signature Technologies")))
-            .andExpect(jsonPath("$.vendor_url", equalTo("/api/v1/vendors/1")));
+            .andExpect(jsonPath("$.name", equalTo("Signature Technologies")));
   }
 
   @Test
@@ -119,8 +118,7 @@ class VendorControllerTest {
                     .accept(MediaType.APPLICATION_JSON)
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.name", equalTo("Microsoft Technologies")))
-            .andExpect(jsonPath("$.vendor_url", equalTo("/api/v1/vendors/1")));
+            .andExpect(jsonPath("$.name", equalTo("Microsoft Technologies")));
   }
 
   @Test
@@ -138,8 +136,7 @@ class VendorControllerTest {
                     .accept(MediaType.APPLICATION_JSON)
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.name", equalTo("Alphabet Technologies")))
-            .andExpect(jsonPath("$.vendor_url", equalTo("/api/v1/vendors/1")));
+            .andExpect(jsonPath("$.name", equalTo("Alphabet Technologies")));
   }
 
   @Test

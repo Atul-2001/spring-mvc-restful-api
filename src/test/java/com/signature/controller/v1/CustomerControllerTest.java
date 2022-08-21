@@ -6,7 +6,10 @@ import com.signature.mapper.CustomerMapper;
 import com.signature.model.Customer;
 import com.signature.service.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -27,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
+@TestMethodOrder(OrderAnnotation.class)
 class CustomerControllerTest {
 
   private MockMvc mockMvc;
@@ -46,6 +50,7 @@ class CustomerControllerTest {
   }
 
   @Test
+  @Order(1)
   void createCustomer() throws Exception {
     //given
     Customer customer = new Customer(1L, "Atul", "Singh");
@@ -60,10 +65,12 @@ class CustomerControllerTest {
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isCreated())
             .andExpect(jsonPath("$.firstName", equalTo("Atul")))
-            .andExpect(jsonPath("$.lastName", equalTo("Singh")));
+            .andExpect(jsonPath("$.lastName", equalTo("Singh")))
+            .andExpect(jsonPath("$.customer_url", equalTo("/api/v1/customers/1")));
   }
 
   @Test
+  @Order(2)
   void getCustomer() throws Exception {
     //given
     Customer customer = new Customer(1L, "Atul", "Singh");
@@ -80,6 +87,7 @@ class CustomerControllerTest {
   }
 
   @Test
+  @Order(3)
   void getAllCustomers() throws Exception {
     //given
     Customer customer1 = new Customer(1L, "Rishu", "Singh");
@@ -98,6 +106,7 @@ class CustomerControllerTest {
   }
 
   @Test
+  @Order(4)
   void updateCustomer() throws Exception {
     //given
     Customer customer = new Customer(1L, "Atul", "Singh");
@@ -116,6 +125,7 @@ class CustomerControllerTest {
   }
 
   @Test
+  @Order(5)
   void patchCustomer() throws Exception {
     //given
     Customer customer = new Customer(1L, "Atul", "Singh");
@@ -136,6 +146,7 @@ class CustomerControllerTest {
   }
 
   @Test
+  @Order(6)
   void deleteCustomer() throws Exception {
     mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/customers/1")).andExpect(status().isOk());
   }

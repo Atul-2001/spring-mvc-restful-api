@@ -28,7 +28,7 @@ public class CustomerServiceImpl implements CustomerService {
 
   @Override
   public Customer updateCustomer(Customer customer) throws Exception {
-    Integer rowAffected = customerRepository.update(customer);
+    final Integer rowAffected = customerRepository.update(customer);
     if (rowAffected == 0) {
       throw new ResourceUpdateFailedException("Failed to update customer with id " + customer.getId());
     }
@@ -37,7 +37,7 @@ public class CustomerServiceImpl implements CustomerService {
 
   @Override
   public Customer patchCustomer(Customer customer) throws Exception {
-    Customer existingCustomer = getCustomer(customer.getId());
+    final Customer existingCustomer = getCustomer(customer.getId());
     if (existingCustomer == null) {
       throw new ResourceNotFoundException("Customer with id " + customer.getId() + " not found");
     } else {
@@ -47,7 +47,7 @@ public class CustomerServiceImpl implements CustomerService {
       if (customer.getLastName() != null) {
         existingCustomer.setLastName(customer.getLastName());
       }
-      Integer rowAffected = customerRepository.update(existingCustomer);
+      final Integer rowAffected = customerRepository.update(existingCustomer);
       if (rowAffected == 0) {
         throw new ResourceUpdateFailedException("Failed to patch customer with id " + customer.getId());
       }

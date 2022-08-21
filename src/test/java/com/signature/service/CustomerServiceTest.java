@@ -4,7 +4,10 @@ import com.signature.model.Customer;
 import com.signature.repository.CustomerRepository;
 import com.signature.service.impl.CustomerServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -22,6 +25,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@TestMethodOrder(OrderAnnotation.class)
 class CustomerServiceTest {
 
   private CustomerService customerService;
@@ -35,6 +39,7 @@ class CustomerServiceTest {
   }
 
   @Test
+  @Order(1)
   void addCustomer() {
     //given
     Customer customer = new Customer(1L, "Atul", "Singh");
@@ -55,6 +60,7 @@ class CustomerServiceTest {
   }
 
   @Test
+  @Order(2)
   void updateCustomer() throws Exception {
     //given
     Customer customer = new Customer(1L, "Atul", "Singh");
@@ -80,6 +86,7 @@ class CustomerServiceTest {
   }
 
   @Test
+  @Order(3)
   void getCustomer() throws Exception {
     //given
     Customer customer = new Customer(1L, "Atul", "Singh");
@@ -94,6 +101,7 @@ class CustomerServiceTest {
   }
 
   @Test
+  @Order(4)
   void getAllCustomers() {
     //given
     List<Customer> customers = Arrays.asList(new Customer(), new Customer(), new Customer());
@@ -108,6 +116,7 @@ class CustomerServiceTest {
   }
 
   @Test
+  @Order(5)
   void deleteCustomer() {
     customerService.deleteCustomer(1L);
 

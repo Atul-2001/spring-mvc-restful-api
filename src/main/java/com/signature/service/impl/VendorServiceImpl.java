@@ -37,7 +37,7 @@ public class VendorServiceImpl implements VendorService {
 
   @Override
   public Vendor patchVendor(Vendor vendor) throws Exception {
-    Vendor existingVendor = getVendor(vendor.getId());
+    final Vendor existingVendor = getVendor(vendor.getId());
     if (existingVendor == null) {
       throw new ResourceNotFoundException("Vendor with id " + vendor.getId() + " not found");
     } else {
