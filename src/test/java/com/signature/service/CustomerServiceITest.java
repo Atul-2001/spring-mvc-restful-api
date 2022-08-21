@@ -4,6 +4,7 @@ import com.signature.bootstrap.Bootstrap;
 import com.signature.model.Customer;
 import com.signature.repository.CategoryRepository;
 import com.signature.repository.CustomerRepository;
+import com.signature.repository.VendorRepository;
 import com.signature.service.impl.CustomerServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,11 +37,14 @@ class CustomerServiceITest {
   @Autowired
   public CustomerRepository customerRepository;
 
+  @Autowired
+  public VendorRepository vendorRepository;
+
   @BeforeEach
   public void setUp() throws Exception {
     log.info("Started loading initial data");
 
-    new Bootstrap(categoryRepository, customerRepository).run();
+    new Bootstrap(categoryRepository, customerRepository, vendorRepository).run();
 
     log.info("Finished loading initial data");
 

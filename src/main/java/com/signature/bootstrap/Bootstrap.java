@@ -2,8 +2,10 @@ package com.signature.bootstrap;
 
 import com.signature.model.Category;
 import com.signature.model.Customer;
+import com.signature.model.Vendor;
 import com.signature.repository.CategoryRepository;
 import com.signature.repository.CustomerRepository;
+import com.signature.repository.VendorRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -14,11 +16,14 @@ public class Bootstrap implements CommandLineRunner {
 
   private final CategoryRepository categoryRepository;
   private final CustomerRepository customerRepository;
+  private final VendorRepository vendorRepository;
 
   public Bootstrap(final CategoryRepository categoryRepository,
-                   final CustomerRepository customerRepository) {
+                   final CustomerRepository customerRepository,
+                   final VendorRepository vendorRepository) {
     this.categoryRepository = categoryRepository;
     this.customerRepository = customerRepository;
+    this.vendorRepository = vendorRepository;
   }
 
   private void loadCategories() throws Exception {
@@ -43,9 +48,21 @@ public class Bootstrap implements CommandLineRunner {
     log.info("No. of customers added : {}", customerRepository.count());
   }
 
+  private void loadVendors() throws Exception {
+    vendorRepository.save(new Vendor("Signature Technologies Ltd."));
+    vendorRepository.save(new Vendor("Vandela Technologies Ltd."));
+    vendorRepository.save(new Vendor("Apple Technologies Ltd."));
+    vendorRepository.save(new Vendor("Microsoft Technologies Ltd."));
+    vendorRepository.save(new Vendor("Google Technologies Ltd."));
+    vendorRepository.save(new Vendor("Facebook Technologies Ltd."));
+
+    log.info("No. of vendors added : {}", vendorRepository.count());
+  }
+
   @Override
   public void run(String... args) throws Exception {
     loadCategories();
     loadCustomers();
+    loadVendors();
   }
 }
