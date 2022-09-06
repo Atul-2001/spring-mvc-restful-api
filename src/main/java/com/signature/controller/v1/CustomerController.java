@@ -48,13 +48,14 @@ public class CustomerController {
     return customerDTO;
   }
 
-  @PostMapping
+  @PostMapping(produces = {"application/json", "application/xml"},
+          consumes = {"application/json", "application/xml"})
   @ResponseStatus(HttpStatus.CREATED)
   @Operation(summary = "Create a new customer")
   @ApiResponses(value = {
           @ApiResponse(responseCode = "201", description = "Customer created",
-                  content = @Content(mediaType = "application/json",
-                          schema = @Schema(implementation = CustomerDTO.class))),
+                  content = {@Content(mediaType = "application/json", schema = @Schema(implementation = CustomerDTO.class)),
+                          @Content(mediaType = "application/xml", schema = @Schema(implementation = CustomerDTO.class))}),
           @ApiResponse(responseCode = "400", description = "Invalid input", content = @Content),
           @ApiResponse(responseCode = "409", description = "Customer already exists", content = @Content)
   })
@@ -63,37 +64,39 @@ public class CustomerController {
     return customerToCustomerDto(customerService.addCustomer(customer));
   }
 
-  @GetMapping(value = "/{id}")
+  @GetMapping(value = "/{id}", produces = {"application/json", "application/xml"})
   @ResponseStatus(HttpStatus.OK)
   @Operation(summary = "Get a customer by id")
   @ApiResponses(value = {
           @ApiResponse(responseCode = "200", description = "Customer found",
-                  content = @Content(mediaType = "application/json",
-                          schema = @Schema(implementation = CustomerDTO.class))),
+                  content = {@Content(mediaType = "application/json", schema = @Schema(implementation = CustomerDTO.class)),
+                          @Content(mediaType = "application/xml", schema = @Schema(implementation = CustomerDTO.class))}),
           @ApiResponse(responseCode = "404", description = "Customer not found", content = @Content)
   })
   public CustomerDTO getCustomer(@PathVariable final Long id) throws Exception {
     return customerMapper.customerToCustomerDto(customerService.getCustomer(id));
   }
 
-  @GetMapping
+  @GetMapping(produces = {"application/json", "application/xml"})
   @ResponseStatus(HttpStatus.OK)
   @Operation(summary = "Get all customers")
   @ApiResponse(responseCode = "200", description = "Found all customers",
-          content = @Content(mediaType = "application/json",
-                  array = @ArraySchema(schema = @Schema(implementation = CustomerDTO.class))))
+          content = {@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = CustomerDTO.class))),
+                  @Content(mediaType = "application/xml", array = @ArraySchema(schema = @Schema(implementation = CustomerDTO.class)))})
   public List<CustomerDTO> getAllCustomers() {
     return customerService.getAllCustomers().stream()
             .map(this::customerToCustomerDto).collect(Collectors.toList());
   }
 
-  @PutMapping("/{id}")
+  @PutMapping(value = "/{id}",
+          produces = {"application/json", "application/xml"},
+          consumes = {"application/json", "application/xml"})
   @ResponseStatus(HttpStatus.OK)
   @Operation(summary = "Update an existing customer")
   @ApiResponses(value = {
           @ApiResponse(responseCode = "200", description = "Customer updated",
-                  content = @Content(mediaType = "application/json",
-                          schema = @Schema(implementation = CustomerDTO.class))),
+                  content = {@Content(mediaType = "application/json", schema = @Schema(implementation = CustomerDTO.class)),
+                          @Content(mediaType = "application/xml", schema = @Schema(implementation = CustomerDTO.class))}),
           @ApiResponse(responseCode = "400", description = "Invalid input", content = @Content),
           @ApiResponse(responseCode = "404", description = "Customer not found", content = @Content)
   })
@@ -104,13 +107,15 @@ public class CustomerController {
     return customerMapper.customerToCustomerDto(customerService.updateCustomer(customer));
   }
 
-  @PatchMapping("/{id}")
+  @PatchMapping(value = "/{id}",
+          produces = {"application/json", "application/xml"},
+          consumes = {"application/json", "application/xml"})
   @ResponseStatus(HttpStatus.OK)
   @Operation(summary = "Patch an existing customer")
   @ApiResponses(value = {
           @ApiResponse(responseCode = "200", description = "Customer patched",
-                  content = @Content(mediaType = "application/json",
-                          schema = @Schema(implementation = CustomerDTO.class))),
+                  content = {@Content(mediaType = "application/json", schema = @Schema(implementation = CustomerDTO.class)),
+                          @Content(mediaType = "application/xml", schema = @Schema(implementation = CustomerDTO.class))}),
           @ApiResponse(responseCode = "400", description = "Invalid input", content = @Content),
           @ApiResponse(responseCode = "404", description = "Customer not found", content = @Content)
   })

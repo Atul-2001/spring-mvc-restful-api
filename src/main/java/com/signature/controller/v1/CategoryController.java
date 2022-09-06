@@ -44,12 +44,12 @@ public class CategoryController {
     return categoryDTO;
   }
 
-  @GetMapping
+  @GetMapping(produces = {"application/json", "application/xml"})
   @ResponseStatus(HttpStatus.OK)
   @Operation(summary = "Get all categories")
   @ApiResponse(responseCode = "200", description = "Found all categories",
-          content = {@Content(mediaType = "application/json",
-                  array = @ArraySchema(schema = @Schema(implementation = CategoryDTO.class)))})
+          content = {@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = CategoryDTO.class))),
+                  @Content(mediaType = "application/xml", array = @ArraySchema(schema = @Schema(implementation = CategoryDTO.class)))})
   public List<CategoryDTO> getAllCategories() {
     return categoryService.getAll().stream().map(this::categoryToCategoryDto).collect(Collectors.toList());
   }
@@ -63,13 +63,13 @@ public class CategoryController {
     return categoryToCategoryDto(categoryService.getByName(name));
   }
 
-  @GetMapping("/{identifier}")
+  @GetMapping(value = "/{identifier}", produces = {"application/json", "application/xml"})
   @ResponseStatus(HttpStatus.OK)
   @Operation(summary = "Get category by id or name")
   @ApiResponses(value = {
           @ApiResponse(responseCode = "200", description = "Found category",
-                  content = {@Content(mediaType = "application/json",
-                          schema = @Schema(implementation = CategoryDTO.class))}),
+                  content = {@Content(mediaType = "application/json", schema = @Schema(implementation = CategoryDTO.class)),
+                          @Content(mediaType = "application/xml", schema = @Schema(implementation = CategoryDTO.class))}),
           @ApiResponse(responseCode = "400", description = "Invalid id supplied",
                   content = @Content),
           @ApiResponse(responseCode = "404", description = "Category not found",

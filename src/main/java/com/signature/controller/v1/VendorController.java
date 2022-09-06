@@ -48,13 +48,14 @@ public class VendorController {
     return vendorDTO;
   }
 
-  @PostMapping
+  @PostMapping(produces = {"application/json", "application/xml"},
+          consumes = {"application/json", "application/xml"})
   @ResponseStatus(HttpStatus.CREATED)
   @Operation(summary = "Create a new vendor")
   @ApiResponses(value = {
           @ApiResponse(responseCode = "201", description = "Vendor created",
-                  content = @Content(mediaType = "application/json",
-                          schema = @Schema(implementation = VendorDTO.class))),
+                  content = {@Content(mediaType = "application/json", schema = @Schema(implementation = VendorDTO.class)),
+                          @Content(mediaType = "application/xml", schema = @Schema(implementation = VendorDTO.class))}),
           @ApiResponse(responseCode = "400", description = "Invalid input", content = @Content),
           @ApiResponse(responseCode = "409", description = "Vendor already exists", content = @Content)
   })
@@ -63,36 +64,38 @@ public class VendorController {
     return vendorToVendorDto(vendorService.addVendor(vendor));
   }
 
-  @GetMapping(value = "/{id}")
+  @GetMapping(value = "/{id}", produces = {"application/json", "application/xml"})
   @ResponseStatus(HttpStatus.OK)
   @Operation(summary = "Get a vendor by id")
   @ApiResponses(value = {
           @ApiResponse(responseCode = "200", description = "Vendor found",
-                  content = @Content(mediaType = "application/json",
-                          schema = @Schema(implementation = VendorDTO.class))),
+                  content = {@Content(mediaType = "application/json", schema = @Schema(implementation = VendorDTO.class)),
+                          @Content(mediaType = "application/xml", schema = @Schema(implementation = VendorDTO.class))}),
           @ApiResponse(responseCode = "404", description = "Vendor not found", content = @Content)
   })
   public VendorDTO getVendor(@PathVariable final Long id) throws Exception {
     return vendorMapper.vendorToVendorDto(vendorService.getVendor(id));
   }
 
-  @GetMapping
+  @GetMapping(produces = {"application/json", "application/xml"})
   @ResponseStatus(HttpStatus.OK)
   @Operation(summary = "Get all vendors")
   @ApiResponse(responseCode = "200", description = "Found all vendors",
-          content = @Content(mediaType = "application/json",
-                  array = @ArraySchema(schema = @Schema(implementation = VendorDTO.class))))
+          content = {@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = VendorDTO.class))),
+                  @Content(mediaType = "application/xml", array = @ArraySchema(schema = @Schema(implementation = VendorDTO.class)))})
   public List<VendorDTO> getAllVendors() {
     return vendorService.getAllVendors().stream().map(this::vendorToVendorDto).collect(Collectors.toList());
   }
 
-  @PutMapping(value = "/{id}")
+  @PutMapping(value = "/{id}",
+          produces = {"application/json", "application/xml"},
+          consumes = {"application/json", "application/xml"})
   @ResponseStatus(HttpStatus.OK)
   @Operation(summary = "Update an existing vendor")
   @ApiResponses(value = {
           @ApiResponse(responseCode = "200", description = "Vendor updated",
-                  content = @Content(mediaType = "application/json",
-                          schema = @Schema(implementation = VendorDTO.class))),
+                  content = {@Content(mediaType = "application/json", schema = @Schema(implementation = VendorDTO.class)),
+                          @Content(mediaType = "application/xml", schema = @Schema(implementation = VendorDTO.class))}),
           @ApiResponse(responseCode = "400", description = "Invalid input", content = @Content),
           @ApiResponse(responseCode = "404", description = "Vendor not found", content = @Content)
   })
@@ -103,13 +106,15 @@ public class VendorController {
     return vendorMapper.vendorToVendorDto(vendorService.updateVendor(vendor));
   }
 
-  @PatchMapping(value = "/{id}")
+  @PatchMapping(value = "/{id}",
+          produces = {"application/json", "application/xml"},
+          consumes = {"application/json", "application/xml"})
   @ResponseStatus(HttpStatus.OK)
   @Operation(summary = "Patch an existing vendor")
   @ApiResponses(value = {
           @ApiResponse(responseCode = "200", description = "Vendor patched",
-                  content = @Content(mediaType = "application/json",
-                          schema = @Schema(implementation = VendorDTO.class))),
+                  content = {@Content(mediaType = "application/json", schema = @Schema(implementation = VendorDTO.class)),
+                          @Content(mediaType = "application/xml", schema = @Schema(implementation = VendorDTO.class))}),
           @ApiResponse(responseCode = "400", description = "Invalid input", content = @Content),
           @ApiResponse(responseCode = "404", description = "Vendor not found", content = @Content)
   })
